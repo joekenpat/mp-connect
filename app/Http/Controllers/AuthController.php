@@ -29,6 +29,12 @@ class AuthController extends Controller
       'password' => 'required|alpha_num'
     ]);
 
+    $user_zappy = User::where('email', $request->email)->first();
+    if($user_zappy->password === 'zappy') {
+      $user_zappy->password = bcrypt($request->password);
+      $token = $user_zappy;
+    }
+
     if (!auth()->attempt($data)) {
       return response(['error_message' => 'Incorrect Details.
           Please try again']);
