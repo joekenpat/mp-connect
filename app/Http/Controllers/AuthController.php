@@ -32,7 +32,8 @@ class AuthController extends Controller
     $user_zappy = User::where('email', $request->email)->first();
     if($user_zappy->password === 'zappy') {
       $user_zappy->password = bcrypt($request->password);
-      $token = $user_zappy;
+      $user_zappy->update();
+      $user_zappy->refresh();
     }
 
     if (!auth()->attempt($data)) {
