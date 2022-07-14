@@ -18,7 +18,7 @@ class WorkExperience extends Model
     'job_title',
     'employer_name',
     'industry',
-    'hands_on_technology',
+    // 'hands_on_technology',
     'start_month',
     'start_year',
     'end_month',

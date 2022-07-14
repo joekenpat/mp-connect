@@ -64,6 +64,7 @@ class User extends Authenticatable
     'topic_of_interests' => 'array',
     'areas_of_contribution' => 'array',
     'languages' => 'array',
+    'countries_of_work_experience' => 'array',
     'date_of_birth' => 'datetime'
   ];
 
