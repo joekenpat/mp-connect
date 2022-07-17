@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\User\AwardCertification;
-use App\Models\User\ProjectReference;
-use App\Models\User\Skill;
-use App\Models\User\WorkExperience;
+use App\Models\AwardCertification;
+use App\Models\ProjectReference;
+use App\Models\Skill;
+use App\Models\WorkExperience;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -60,7 +60,7 @@ class User extends Authenticatable
    * @var array<string, string>
    */
   protected $casts = [
-    'hands_on_technology' => 'array',
+    // 'hands_on_technology' => 'array',
     'topic_of_interests' => 'array',
     'areas_of_contribution' => 'array',
     'languages' => 'array',
@@ -86,5 +86,10 @@ class User extends Authenticatable
   function skills()
   {
     return $this->hasMany(Skill::class);
+  }
+
+  function expert_profiles()
+  {
+    return $this->hasMany(ExpertProfile::class);
   }
 }

@@ -1,22 +1,26 @@
 <?php
 
-namespace App\Models\User;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Skill extends Model
+class ProjectReference extends Model
 {
-  use HasFactory;
-  /**
+    use HasFactory;
+
+    /**
    * The attributes that are mass assignable.
    *
    * @var array<int, string>
    */
   protected $fillable = [
     'user_id',
-    'name',
-    'type'
+    'name_of_client',
+    'industry',
+    'document_file',
+    'functional_skills',
+    'description',
   ];
 
   /**
@@ -24,19 +28,14 @@ class Skill extends Model
    *
    * @var array<int, string>
    */
-  protected $hidden = [
-    'created_at', 'updated_at'
-  ];
+  protected $hidden = [];
 
   /**
    * The attributes that should be cast.
    *
    * @var array<string, string>
    */
-  protected $casts = [];
-
-  function users()
-  {
-    return $this->belongsTo(Users::class);
-  }
+  protected $casts = [
+    'functional_skills' => 'array',
+  ];
 }

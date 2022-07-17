@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\User;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AwardCertification extends Model
+class Skill extends Model
 {
   use HasFactory;
   /**
@@ -15,9 +15,8 @@ class AwardCertification extends Model
    */
   protected $fillable = [
     'user_id',
-    'title',
-    'proof_file',
-    'description'
+    'name',
+    'type'
   ];
 
   /**

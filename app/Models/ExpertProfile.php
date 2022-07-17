@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Models\User;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request;
 
-class WorkExperience extends Model
+class ExpertProfile extends Model
 {
   use HasFactory;
   /**
@@ -13,17 +14,10 @@ class WorkExperience extends Model
    *
    * @var array<int, string>
    */
+
   protected $fillable = [
     'user_id',
-    'job_title',
-    'employer_name',
-    'industry',
-    // 'hands_on_technology',
-    'start_month',
-    'start_year',
-    'end_month',
-    'end_year',
-    'is_current_role',
+    'name',
     'description',
   ];
 
@@ -32,27 +26,32 @@ class WorkExperience extends Model
    *
    * @var array<int, string>
    */
-  protected $hidden = [
-    'created_at', 'updated_at'
-  ];
+  protected $hidden = [];
 
   /**
    * The attributes that should be cast.
    *
    * @var array<string, string>
    */
-  protected $casts = [
-    'hands_on_technology' => 'array',
-    'is_current_role' => 'boolean',
-  ];
+  protected $casts = [];
 
   function user()
   {
     return $this->belongsTo(User::class);
   }
 
-  function setIsCurrentRoleAttribute($value)
+  function skills()
   {
-    $this->attributes['is_current_role'] = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+    return $this->hasMany(ExpertSkill::class);
+  }
+
+  function project_references()
+  {
+    return $this->hasManyThrough(ProjectReference::class, ExpertProjectReference::class);
+  }
+
+  function award_certifications()
+  {
+    return $this->hasManyThrough(AwardCertification::class, ExpertAwardCertification::class);
   }
 }

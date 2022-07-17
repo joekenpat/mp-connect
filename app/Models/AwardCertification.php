@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FunctionalSkill extends Model
+class AwardCertification extends Model
 {
   use HasFactory;
   /**
@@ -14,7 +14,10 @@ class FunctionalSkill extends Model
    * @var array<int, string>
    */
   protected $fillable = [
-    'name'
+    'user_id',
+    'title',
+    'proof_file',
+    'description'
   ];
 
   /**
@@ -35,6 +38,6 @@ class FunctionalSkill extends Model
 
   function users()
   {
-    return $this->belongsToMany(Users::class);
+    return $this->belongsTo(Users::class);
   }
 }
