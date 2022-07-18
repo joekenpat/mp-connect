@@ -60,7 +60,7 @@ class AwardCertificationController extends Controller
   public function deleteCertification(Int $certification_id)
   {
     $certification = AwardCertification::where(['user_id' => auth()->id(), 'id' => $certification_id])->first();
-    if($certification) {
+    if ($certification) {
       $certification->delete();
       $response['status'] = 'success';
       $response['message'] = 'User Award / Certification deleted';
@@ -75,14 +75,14 @@ class AwardCertificationController extends Controller
   public function updateExpertCertifications(Request $request)
   {
     $request->validate([
-      'expert_profile_id' => 'required|numeric|exists:expert_profiles,id',
-      'certifications' => 'sometimes|nullable|array',
-      'certifications.*.id' => 'numeric|exists:award_certifications,id,expert_profile_id,' . $request->expert_profile_id,
+      'expert_profile_id' => 'required|numeric|exists:expert_profiles,id,user_id,' . auth()->id(),
+      'certification_ids' => 'sometimes|nullable|array',
+      'certifications.*' => 'numeric|exists:award_certifications,id,user_id,' . auth()->id(),
     ]);
 
     $expertProfile = ExpertProfile::where([
       'user_id' => auth()->id(),
-      'id' => $request->expert_id
+      'id' => $request->expert_profile_id
     ])->first();
     $expertProfile->award_certifications()->sync($request->certifications);
     $response['status'] = 'success';

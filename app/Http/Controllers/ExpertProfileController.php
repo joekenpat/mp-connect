@@ -20,7 +20,7 @@ class ExpertProfileController extends Controller
   public function updateExpertProfile(Request $request)
   {
     $request->validate([
-      'id' => 'sometimes|nullable|numeric|integer|exists:expert_profiles,id',
+      'id' => 'sometimes|nullable|numeric|integer|exists:expert_profiles,id,user_id,' . auth()->id(),
       'name' => 'required|string|max:255',
       'description' => 'sometimes|string|min:100|max:1024',
     ]);

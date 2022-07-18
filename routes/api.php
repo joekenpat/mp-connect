@@ -70,6 +70,6 @@ Route::group([
     Route::post('personal-information', [ExpertProfileController::class, 'updateExpertProfile']);
     Route::post('project-reference', [ProjectReferenceController::class, 'updateExpertProjectReferences']);
     Route::post('skill', [SkillController::class, 'updateExpertSkills']);
-    Route::post('certification', [AwardCertificationController::class, 'updateCertifications']);
+    Route::post('certification', [AwardCertificationController::class, 'updateExpertCertifications']);
   });
 });

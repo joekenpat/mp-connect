@@ -77,14 +77,14 @@ class ProjectReferenceController extends Controller
   public function updateExpertProjectReferences(Request $request)
   {
     $request->validate([
-      'expert_profile_id' => 'required|numeric|exists:expert_profiles,id',
+      'expert_profile_id' => 'required|numeric|exists:expert_profiles,id,user_id,' . auth()->id(),
       'project_reference_ids' => 'sometimes|nullable|array',
-      'project_reference_ids.*' => 'numeric|exists:project_references,id,expert_profile_id,' . $request->expert_profile_id,
+      'project_reference_ids.*' => 'numeric|exists:project_references,id,user_id,' . auth()->id(),
     ]);
 
     $expertProfile = ExpertProfile::where([
       'user_id' => auth()->id(),
-      'id' => $request->expert_id
+      'id' => $request->expert_profile_id
     ])->first();
     $expertProfile->project_references()->sync($request->project_reference_ids);
     $response['status'] = 'success';

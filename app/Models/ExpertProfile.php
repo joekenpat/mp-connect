@@ -47,11 +47,11 @@ class ExpertProfile extends Model
 
   function project_references()
   {
-    return $this->hasManyThrough(ProjectReference::class, ExpertProjectReference::class);
+    return $this->belongsToMany(ProjectReference::class, 'expert_project_references')->using(ExpertProjectReference::class);
   }
 
   function award_certifications()
   {
-    return $this->hasManyThrough(AwardCertification::class, ExpertAwardCertification::class);
+    return $this->belongsToMany(AwardCertification::class, 'expert_award_certifications')->using(ExpertAwardCertification::class);
   }
 }
