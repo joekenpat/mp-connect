@@ -58,6 +58,7 @@ Route::group([
   'middleware' => ['auth:api'],
   'prefix' => 'expert-profile'
 ], function () {
+  Route::get('', [ExpertProfileController::class, 'getExpertProfiles']);
   Route::group(['prefix' => '/{expert_profile_id}', 'where' => ['expert_profile_id' => '[0-9]+']], function () {
     Route::get('', [ExpertProfileController::class, 'getExpertProfile']);
     Route::get('project-reference', [ProjectReferenceController::class, 'getExpertProjectReferences']);

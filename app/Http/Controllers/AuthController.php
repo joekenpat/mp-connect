@@ -29,9 +29,10 @@ class AuthController extends Controller
       'email' => 'email|required|exists:users',
       'password' => 'required|alpha_num'
     ]);
-
+    $first_sign_in = false;
     $user_zappy = User::where('email', $request->email)->first();
-    if($user_zappy->password === 'zappy') {
+    if ($user_zappy->password === 'zappy') {
+      $first_sign_in = true;
       $user_zappy->password = bcrypt($request->password);
       $user_zappy->update();
       $user_zappy->refresh();
@@ -44,6 +45,6 @@ class AuthController extends Controller
 
     $token = auth()->user()->createToken(config('app.name'))->accessToken;
 
-    return response(['user' => auth()->user(), 'token' => $token]);
+    return response(['user' => auth()->user(), 'token' => $token, 'first_sign_in' => $first_sign_in]);
   }
 }
