@@ -28,7 +28,7 @@ class ProjectReference extends Model
    *
    * @var array<int, string>
    */
-  protected $hidden = [];
+  protected $hidden = ['pivot'];
 
   /**
    * The attributes that should be cast.
