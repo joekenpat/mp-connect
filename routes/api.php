@@ -46,6 +46,7 @@ Route::group([
   ], function () {
     Route::post('personal-information', [UserController::class, 'updatePersonalInfo']);
     Route::post('short-bio', [UserController::class, 'updateShortBio']);
+    Route::post('work-status', [UserController::class, 'updateJobSearchPreference']);
     Route::post('work-experience', [WorkExperienceController::class, 'updateWorkExperience']);
     Route::post('project-reference', [ProjectReferenceController::class, 'updateProjectReferences']);
     Route::post('skill', [SkillController::class, 'updateSkills']);

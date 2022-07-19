@@ -42,6 +42,12 @@ class User extends Authenticatable
     'areas_of_contribution',
     'short_bio',
     'date_of_birth',
+    'current_job_status',
+    'available_for_job_from',
+    'available_for_fulltime_job_from',
+    'preferred_job_location_type',
+    'preferred_job_hours_per_week',
+    'preferred_job_countries',
   ];
 
   /**
@@ -52,6 +58,7 @@ class User extends Authenticatable
   protected $hidden = [
     'password',
     'remember_token',
+    "hands_on_technology",
   ];
 
   /**
@@ -65,7 +72,10 @@ class User extends Authenticatable
     'areas_of_contribution' => 'array',
     'languages' => 'array',
     'countries_of_work_experience' => 'array',
-    'date_of_birth' => 'datetime'
+    'date_of_birth' => 'date:Y-m-d',
+    'available_for_job_from' => 'date:Y-m-d',
+    'available_for_fulltime_job_from' => 'date:Y-m-d',
+    'preferred_job_countries' => 'array',
   ];
 
   function work_experiences()

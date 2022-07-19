@@ -23,7 +23,7 @@ class UserController extends Controller
       'gender' => 'sometimes|nullable|alpha|in:male,female',
       'nationality' => 'sometimes|nullable|string',
       'current_address' => 'sometimes|nullable|string',
-      'mobile_phone' => 'sometimes|nullable|string|max:15|min:8|unique:users,mobile_phone,'. auth()->id(),
+      'mobile_phone' => 'sometimes|nullable|string|max:15|min:8|unique:users,mobile_phone,' . auth()->id(),
       'current_job_title' => 'sometimes|nullable|string',
       'years_of_work_experience' => 'sometimes|nullable|numeric|integer|between:0,10',
       'countries_of_work_experience' => 'sometimes|nullable|array|min:0',
@@ -98,6 +98,35 @@ class UserController extends Controller
 
     $response['status'] = 'success';
     $response['message'] = 'User short bio updated';
+    return response($response, 200);
+  }
+
+  public function updateJobSearchPreference(Request $request)
+  {
+    $request->validate([
+      'id' => 'required|numeric|exists:users',
+      'current_job_status' => 'required|alpha_dash|in:not_available,part_time,full_time',
+      'available_for_job_from' => 'sometimes|nullable|required_if:current_job_status,not_available|date|after:today',
+      'available_for_fulltime_job_from' => 'sometimes|nullable|date|after:today',
+      'preferred_job_location_type' => 'sometimes|nullable|required_if:current_job_status,part_time,full_time|alpha_dash|in:remote,onsite',
+      'preferred_job_hours_per_week' => 'sometimes|nullable|required_if:current_job_status,part_time,full_time|integer|between:1,40',
+      'preferred_job_countries' => 'sometimes|nullable|array|min:0',
+      'preferred_job_countries.*' => 'string|distinct|min:3',
+    ]);
+
+    $user = User::whereId(auth()->id())->first();
+    $userData = $request->only([
+      'current_job_status',
+      'available_for_job_from',
+      'available_for_fulltime_job_from',
+      'preferred_job_location_type',
+      'preferred_job_hours_per_week',
+      'preferred_job_countries',
+    ]);
+    $user->update($userData);
+
+    $response['status'] = 'success';
+    $response['message'] = 'User work status updated';
     return response($response, 200);
   }
 
