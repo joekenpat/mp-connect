@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectReference extends Model
 {
@@ -38,4 +39,9 @@ class ProjectReference extends Model
   protected $casts = [
     'functional_skills' => 'array',
   ];
+
+  function getDocumentFileAttribute($value)
+  {
+    return $value ? asset('storage/'.$value) : null;
+  }
 }

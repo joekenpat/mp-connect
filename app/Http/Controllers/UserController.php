@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
 
@@ -17,7 +18,7 @@ class UserController extends Controller
   {
     $request->validate([
       'id' => 'required|numeric|exists:users',
-      'new_profile_image' => 'sometimes|nullable|image|mimes:png,jpg,jpeg|max:10240',
+      'new_profile_image' => 'sometimes|nullable|file|mimes:png,jpg,jpeg|max:10240',
       'first_name' => 'sometimes|nullable|alpha',
       'last_name' => 'sometimes|nullable|alpha',
       'gender' => 'sometimes|nullable|alpha|in:male,female',
@@ -38,28 +39,21 @@ class UserController extends Controller
     ]);
 
     $user = User::whereId(auth()->id())->first();
-    $userData = $request->except(['id, new_profile_image']);
+    $userData = $request->except(['id', 'profile_image', 'new_profile_image']);
     $user->update($userData);
 
 
     //updating images
-    if ($request->hasFile('new_profile_image') && isset($request->profile_image) && !empty($request->profile_image)) {
-      $image = Image::make($request->file('new_profile_image'))->encode('jpg', 1);
-      if (Auth()->user()->avatar != null) {
-        if (File::exists("images/users/" . Auth()->user()->avatar)) {
-          File::delete("images/users/" . Auth()->user()->avatar);
-        }
+    if ($request->hasFile('new_profile_image') && isset($request->new_profile_image)) {
+      $image = $request->new_profile_image;
+      $name_hash = $image->hashName();
+      $old_path = $user->getRawOriginal('profile_image');
+      if (Storage::exists($old_path)) {
+        Storage::delete($old_path);
       }
-      $img_name = sprintf("usr_%s.jpg", strtolower(Str::random(10)));
-      if (!File::isDirectory(public_path("images"))) {
-        File::makeDirectory(public_path("images"));
-      }
-      if (!File::isDirectory(public_path("images/users"))) {
-        File::makeDirectory(public_path("images/users"));
-      }
-      $image->save(public_path("images/users/") . $img_name, 70, 'jpg');
-      $user->personalInformation()->update([
-        'profile_image' => $img_name
+      $new_image_path = Storage::putFileAs('images/users', $image, $name_hash);
+      $user->update([
+        'profile_image' => $new_image_path
       ]);
     }
     $response['status'] = 'success';

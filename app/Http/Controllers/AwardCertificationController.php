@@ -6,6 +6,8 @@ use App\Models\AwardCertification;
 use App\Models\ExpertProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 
 class AwardCertificationController extends Controller
 {
@@ -35,6 +37,7 @@ class AwardCertificationController extends Controller
       'certifications' => 'sometimes|nullable|array',
       'certifications.*.id' => 'sometimes|nullable|numeric|exists:award_certifications,id',
       'certifications.*.title' => 'required|nullable|string',
+      'certifications.*.proof_file' => 'sometimes|nullable|file|mimes:png,jpg,jpeg,pdf,doc,docx|max:10240',
       'certifications.*.description' => 'sometimes|nullable|string'
     ]);
 
@@ -43,11 +46,26 @@ class AwardCertificationController extends Controller
 
     if (isset($request->certifications) && count($request->certifications)) {
       foreach ($request->certifications as $certification) {
+        $payload = Arr::except($certification, ['proof_file, new_proof_file']);
         if (isset($certification['id'])) {
-          AwardCertification::where(['user_id' => $user_id, 'id' => $certification['id']])->update($certification);
+          $new_award = AwardCertification::where(['user_id' => $user_id, 'id' => $certification['id']]) ->first();
+          $new_award->update($payload);
         } else {
           $certification['user_id'] = $user_id;
-          AwardCertification::create($certification);
+          $new_award = AwardCertification::create($payload);
+        }
+        $old_path = $new_award->getRawOriginal('proof_file');
+        if ($certification['new_proof_file'] && isset($certification['new_proof_file'])) {
+          $new_proof_file = $certification['new_proof_file'];
+          $new_proof_file_name =  $new_proof_file->hashName();
+          if(Storage::exists($old_path)) {
+            Storage::delete($old_path);
+          }
+          $new_proof_path = Storage::putFileAs('images/award_certifications', $new_proof_file, $new_proof_file_name);
+          if($new_proof_path) {
+            $new_award->proof_file = $new_proof_path;
+            $new_award->update();
+          }
         }
       };
     }

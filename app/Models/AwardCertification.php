@@ -41,4 +41,9 @@ class AwardCertification extends Model
   {
     return $this->belongsTo(Users::class);
   }
+
+  function getProofFileAttribute($value)
+  {
+    return $value ? asset('storage/'.$value) : null;
+  }
 }

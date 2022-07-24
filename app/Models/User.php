@@ -102,4 +102,8 @@ class User extends Authenticatable
   {
     return $this->hasMany(ExpertProfile::class);
   }
+  function getProfileImageAttribute($value)
+  {
+    return $value ? asset('storage/' . $value) : null;
+  }
 }
