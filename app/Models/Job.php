@@ -48,4 +48,15 @@ class Job extends Model
         return $this->belongsToMany(User::class, 'job_applications');
     }
 
+
+    /**
+     * The users that belong to the Job
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function users_invited()
+    {
+        return $this->belongsToMany(User::class, 'job_invitations');
+    }
+
 }

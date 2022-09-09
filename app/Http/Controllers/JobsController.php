@@ -68,6 +68,13 @@ class JobsController extends Controller
         //
     }
 
+    public function getInvitations($email)
+    {
+        $user = User::where('email', $email)->first();
+        $jobs = $user->jobs_invited;
+        return response(['jobs' => $jobs]);
+    }
+
     public function apply(Request $request)
     {
         $validated = $request->validate([
@@ -121,11 +128,11 @@ class JobsController extends Controller
                                            ->where('job_id', $job->pivot->job_id)->first();
                                            
             $job->application_id = $application->id;
+            $job->status = $application->status;
         }
 
         return response(['jobs' => $jobs]);
     }
-
 
     public function getApplied($id)
     {
@@ -136,6 +143,7 @@ class JobsController extends Controller
 
         return response(['job' => $job, 'profile' => $profile, 'status' => $query->status]);
     }
+
 
     public function interested(Request $request)
     {
@@ -178,6 +186,7 @@ class JobsController extends Controller
         $jobs = $user->jobs;
         return response(['jobs' => $jobs]);
     }
+
 
     public function search(Request $request){
         $jobs = Job::where([

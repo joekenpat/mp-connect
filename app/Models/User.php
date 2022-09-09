@@ -117,5 +117,10 @@ class User extends Authenticatable
   {
     return $this->belongsToMany(Job::class, 'job_applications');
   }
+
+  public function jobs_invited()
+  {
+    return $this->belongsToMany(Job::class, 'job_invitations');
+  }
   
 }

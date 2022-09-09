@@ -98,6 +98,7 @@ Route::group([
   'prefix' => 'dashboard',
 ], function() {
   Route::get('', [DashboardController::class, 'index']);
+  Route::get('counts/{email}', [DashboardController::class, 'counts']);
 });
 
 
@@ -108,6 +109,7 @@ Route::group([
   Route::get('', [JobsController::class, 'index']); 
   Route::get('details/{job}', [JobsController::class, 'show']); 
   Route::get('interested/{email}', [JobsController::class, 'getInterested']); 
+  Route::get('invitations/{email}', [JobsController::class, 'getInvitations']); 
   Route::get('all-applied/{email}', [JobsController::class, 'getAllApplied']); 
   Route::get('applied/{id}', [JobsController::class, 'getApplied']); 
   Route::post('apply', [JobsController::class, 'apply']); 
