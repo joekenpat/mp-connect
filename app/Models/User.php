@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use App\Models\AwardCertification;
-use App\Models\ProjectReference;
+use App\Models\Job;
 use App\Models\Skill;
 use App\Models\WorkExperience;
+use App\Models\ProjectReference;
+use App\Models\AwardCertification;
+use Laravel\Passport\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -106,4 +107,15 @@ class User extends Authenticatable
   {
     return $value ? asset('storage/' . $value) : null;
   }
+
+  public function jobs()
+  {
+    return $this->belongsToMany(Job::class, 'job_interested');
+  }
+
+  public function jobs_applied()
+  {
+    return $this->belongsToMany(Job::class, 'job_applications');
+  }
+  
 }

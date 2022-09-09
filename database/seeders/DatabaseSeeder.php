@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Database\Seeders\CountrySeeder;
+use Database\Seeders\IndustrySeeder;
+use Database\Seeders\FunctionalSkillSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,6 +16,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        \App\Models\User::factory(1)->create();
+        \App\Models\Job::factory(20)->create();
+        $this->call([
+            CountrySeeder::class,
+            FunctionalSkillSeeder::class,
+            IndustrySeeder::class
+        ]);
     }
 }

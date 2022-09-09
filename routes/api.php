@@ -1,14 +1,17 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\AwardCertificationController;
-use App\Http\Controllers\ExpertProfileController;
-use App\Http\Controllers\ProjectReferenceController;
-use App\Http\Controllers\SkillController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\WorkExperienceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\JobsController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\SkillController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UtilitiesController;
+use App\Http\Controllers\ExpertProfileController;
+use App\Http\Controllers\WorkExperienceController;
+use App\Http\Controllers\ProjectReferenceController;
+use App\Http\Controllers\AwardCertificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +34,15 @@ Route::group([
 });
 
 Route::group([
+  'prefix' => 'utilities',
+], function() {
+  Route::get('countries', [UtilitiesController::class, 'country']);
+  Route::get('industries', [UtilitiesController::class, 'industry']);
+  Route::get('functional_skills', [UtilitiesController::class, 'functional_skills']);
+});
+
+
+Route::group([
   'middleware' => ['auth:api'],
   'prefix' => 'profile'
 ], function () {
@@ -41,6 +53,7 @@ Route::group([
   Route::get('certification', [AwardCertificationController::class, 'getCertifications']);
   Route::get('interest', [UserController::class, 'getInterests']);
 
+  
   Route::group([
     'prefix' => 'update'
   ], function () {
@@ -55,6 +68,7 @@ Route::group([
   });
 });
 
+
 Route::group([
   'middleware' => ['auth:api'],
   'prefix' => 'expert-profile'
@@ -66,6 +80,8 @@ Route::group([
     Route::get('skill', [SkillController::class, 'getExpertSkill']);
     Route::get('certification', [AwardCertificationController::class, 'getExpertCertification']);
   });
+  
+
   Route::group([
     'prefix' => 'update'
   ], function () {
@@ -74,4 +90,35 @@ Route::group([
     Route::post('skill', [SkillController::class, 'updateExpertSkills']);
     Route::post('certification', [AwardCertificationController::class, 'updateExpertCertifications']);
   });
+});
+
+
+Route::group([
+  'middleware' => ['auth:api'],
+  'prefix' => 'dashboard',
+], function() {
+  Route::get('', [DashboardController::class, 'index']);
+});
+
+
+Route::group([ 
+  'middleware' => ['auth:api'], 
+  'prefix' => 'jobs', 
+], function() { 
+  Route::get('', [JobsController::class, 'index']); 
+  Route::get('details/{job}', [JobsController::class, 'show']); 
+  Route::get('interested/{email}', [JobsController::class, 'getInterested']); 
+  Route::get('all-applied/{email}', [JobsController::class, 'getAllApplied']); 
+  Route::get('applied/{id}', [JobsController::class, 'getApplied']); 
+  Route::post('apply', [JobsController::class, 'apply']); 
+  Route::post('interested', [JobsController::class, 'interested']); 
+});
+
+
+Route::group([
+  'middleware' => ['auth:api'],
+  'prefix' => 'search',
+], function() {
+  Route::post('', [JobsController::class, 'search']);
+  Route::post('filter', [JobsController::class, 'filter']);
 });
