@@ -54,7 +54,7 @@ Route::group([
   Route::get('interest', [UserController::class, 'getInterests']);
 
   
-  Route::group([
+  Route::group([ 
     'prefix' => 'update'
   ], function () {
     Route::post('personal-information', [UserController::class, 'updatePersonalInfo']);
