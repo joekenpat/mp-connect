@@ -206,19 +206,16 @@ class JobsController extends Controller
         $jobs = Job::query();
 
         $term = $request->search_term;
-        $description = $request->description;
         $country = $request->country;
         $functional_skills = $request->functional_skills;
         $industry_expertise = $request->industry_expertise;
         $location = $request->location;
 
         if ($term) {
-            $jobs->where('title','LIKE','%'.$term.'%');
+            $jobs->where('title','LIKE','%'.$term.'%')
+                    ->orWhere('description','LIKE','%'.$term.'%');
         }
 
-        if ($description) {
-            $jobs->where('description','LIKE','%'.$description.'%');
-        }
 
         if ($country) {
             $jobs->where('country','LIKE','%'.$country.'%');
@@ -230,10 +227,6 @@ class JobsController extends Controller
 
         if ($industry_expertise) {
             $jobs->whereIn('industry', $industry_expertise);
-        }
-
-        if ($location) {
-            $jobs->whereIn('location', $location);
         }
 
 

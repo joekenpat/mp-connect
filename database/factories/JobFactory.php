@@ -143,6 +143,8 @@ class JobFactory extends Factory
             "Patents",
         ];
 
+        $experience = ['PHP', 'Laravel', 'Javascript', 'HTML', 'CSS', 'ReactJs', 'VueJs', 'AngularJs', 'NodeJs', 'ExpressJs'];
+
         $rate = number_format(round($this->faker->randomFloat(2, 400, 1500), -3));
         $rate2 = number_format(round($this->faker->randomFloat(2, 1500, 5000), -3));
 
@@ -151,14 +153,12 @@ class JobFactory extends Factory
             'industry' => $this->faker->randomElement($industries),
             'description' => $this->faker->paragraphs(3, true),
             'availability' => $this->faker->randomElement(['Full-time', 'Part-time', 'Contract']),
-            'location' => $this->faker->randomElement(['On-site', 'Remote', 'Hybrid']),
-            'pay_rate' => "$$rate - $$rate2",
             'candidates_required' => $this->faker->numberBetween(0, 15),
             'country' => $this->faker->country(),
             'experience' => $this->faker->numberBetween(0, 15),
-            'industry_experience' => $this->faker->numberBetween(0, 20),
+            'industry_experience' => implode(',', $this->faker->randomElements($experience, 5)),
             'functional_skills' => implode(',', $this->faker->randomElements($skills, 5)),
-            'ends_on' => $this->faker->dateTimeBetween('-1 week', '+3 months'),
+            'deadline' => $this->faker->dateTimeBetween('-1 week', '+3 months'),
         ];
     }
 }

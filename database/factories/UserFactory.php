@@ -23,7 +23,7 @@ class UserFactory extends Factory
         //     'remember_token' => Str::random(10),
         // ];
         return [
-            'email' => "Willemzy2002@gmail.com",
+            'email' => "willemzy2002@gmail.com",
             'password' => Hash::make('password'),
             'first_name' => $this->faker->firstname(),
             'last_name' => $this->faker->lastname(),

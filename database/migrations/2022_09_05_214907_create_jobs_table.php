@@ -20,13 +20,13 @@ class CreateJobsTable extends Migration
             $table->string('industry');
             $table->enum('availability', ['full-time', 'part-time', 'contract']);
             $table->string('country');
-            $table->string('pay_rate');
+            // $table->string('pay_rate');
             $table->integer('experience');
             $table->integer('candidates_required');
-            $table->enum('location', ['on-site', 'remote', 'hybrid']);
-            $table->integer('industry_experience');
+            // $table->enum('location', ['on-site', 'remote', 'hybrid']);
+            $table->longtext('industry_experience'); #multiple
             $table->longtext('functional_skills');
-            $table->timestamp('ends_on');
+            $table->timestamp('deadline'); #previously known as end_on
             $table->timestamps();
         });
     }
