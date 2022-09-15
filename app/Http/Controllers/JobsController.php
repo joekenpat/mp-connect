@@ -80,7 +80,6 @@ class JobsController extends Controller
         $validated = $request->validate([
             'job_id' => 'required|integer',
             'user' => 'required|string|email',
-            'description' => 'required|string',
         ]);
 
         $job_id = $request->job_id;
@@ -94,7 +93,6 @@ class JobsController extends Controller
         
 
         if (count($find) < 1) {
-            // dd($description);
 
             $job = JobApplication::create([
                 'job_id' => $job_id,
@@ -111,9 +109,9 @@ class JobsController extends Controller
                 return response($response, 200);
             }
         } else {
-            $response['status'] = 'success';
+            $response['status'] = 'error';
             $response['message'] = 'You have already applied for this job';
-            return response($response, 200);
+            return response($response, 400);
         }
         
     }
@@ -209,13 +207,13 @@ class JobsController extends Controller
         $country = $request->country;
         $functional_skills = $request->functional_skills;
         $industry_expertise = $request->industry_expertise;
-        $location = $request->location;
+        $experience = $request->experience;
+        $availability = $request->availability;
 
         if ($term) {
             $jobs->where('title','LIKE','%'.$term.'%')
                     ->orWhere('description','LIKE','%'.$term.'%');
         }
-
 
         if ($country) {
             $jobs->where('country','LIKE','%'.$country.'%');
@@ -227,6 +225,14 @@ class JobsController extends Controller
 
         if ($industry_expertise) {
             $jobs->whereIn('industry', $industry_expertise);
+        }
+
+        if ($experience) {
+            $jobs->where('experience', 'LIKE','%'. $experience .'%');
+        }
+
+        if ($availability) {
+            $jobs->where('availability', 'LIKE','%'. $availability .'%');
         }
 
 
