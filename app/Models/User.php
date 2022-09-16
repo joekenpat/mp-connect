@@ -115,7 +115,9 @@ class User extends Authenticatable
 
   public function jobs_applied()
   {
-    return $this->belongsToMany(Job::class, 'job_applications');
+    return $this->belongsToMany(Job::class, 'job_applications')
+                ->withPivot('status') 
+                ->withPivot('created_at');
   }
 
   public function jobs_invited()

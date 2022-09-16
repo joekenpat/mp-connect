@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller 
 { 
     public function login(Request $request) 
     { 
         $loginData = $request->validate([ 
-            'email' => 'required|string|email|exists:admins', 
+            'email' => 'required|string|email|exists:admins,email', 
             'password' => 'required|string' 
         ]); 
 
@@ -26,6 +28,28 @@ class LoginController extends Controller
         } 
     } 
 
+
+
+    public function changePassword(Request $request)
+    {
+        $data = $request->validate([ 
+            'email' => 'required|email|string|exists:admins,email',
+            'current_password' => 'required|string|current_password', 
+            'new_password' => 'required|string|min:8|different:current_password|confirmed'
+        ]);
+        
+
+        $admin = Admin::where('email', $request->email)->first();
+        $admin->password = Hash::make($request->new_password);
+
+        if ($admin->save()) {
+            auth()->user()->password = $admin->password;
+            return response()->json(['message' => 'Password has been updated successfully'], 200);
+        } else {
+            return response()->json(['message' => 'Sorry, an error occured'], 400);
+        }
+
+    }
 
 
 

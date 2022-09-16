@@ -14,6 +14,12 @@ class UserController extends Controller
         return response()->json(['users' => $users], 200);
     }
 
+    public function all()
+    {
+        $users = User::all();
+        return response()->json(['users' => $users], 200);
+    }
+
     public function show($id)
     {
         $user = User::find($id);
@@ -23,5 +29,21 @@ class UserController extends Controller
             $profile->skills = $profile->skills;
         }
         return response()->json(['user' => $user], 200);
+    }
+
+    public function search($search_term){
+        $users = User::query();
+        $term = $search_term;
+        
+        if ($term) {
+            $users->where('first_name','LIKE','%'.$term.'%')
+                    ->orWhere('last_name','LIKE','%'.$term.'%')
+                    ->orWhere('email','LIKE','%'.$term.'%')
+                    ->orWhere('years_of_work_experience','LIKE','%'.$term.'%')
+                    ->orWhere('nationality', 'LIKE','%'. $term .'%');
+        }
+                
+        $users = $users->paginate(10);
+        return response(['users' => $users], 200);
     }
 }
