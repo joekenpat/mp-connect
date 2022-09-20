@@ -19,10 +19,13 @@ class ExpertProfileController extends Controller
 
   public function getExpertProfiles()
   {
-    $profile = ExpertProfile::where(['user_id' => auth()->id()])->get();
+    $profiles = ExpertProfile::where(['user_id' => auth()->id()])->get();
+    foreach ($profiles as $item) {
+      $item->skills = $item->skills;
+    }
     $response['status'] = 'success';
     $response['message'] = 'User expert profiles retrieved';
-    $response['profiles'] = $profile;
+    $response['profiles'] = $profiles;
     return response($response, 200);
   }
 
