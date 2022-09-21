@@ -8,11 +8,15 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
-    {
-        $jobs = Job::inRandomOrder()->paginate(5);
-        return response()->json(['jobs' => $jobs]);
-    }
+    public function index() 
+    { 
+        $jobs = Job::inRandomOrder()->paginate(5); 
+        foreach($jobs as $job) { 
+            $job->interested = $job->users->where('id', auth()->id())->first() ? true : false; 
+            // dump($job->interested);
+        } 
+        return response()->json(['jobs' => $jobs], 200); 
+    } 
 
     public function counts($email)
     {
